@@ -1,0 +1,29 @@
+{
+  "name": "moonbot",
+  "version": "1.0.0",
+  "description": "a discord bot ",
+  "main": "out/index.js",
+  "scripts": {
+    "ts": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akrck02/moonbot.git"
+  },
+  "keywords": [
+    "bot",
+    "discord"
+  ],
+  "author": "akrck02",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akrck02/moonbot/issues"
+  },
+  "homepage": "https://github.com/akrck02/moonbot#readme",
+  "devDependencies": {
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "discord.js": "^13.3.1"
+  }
+}
