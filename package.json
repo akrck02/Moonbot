@@ -4,7 +4,9 @@
   "description": "a discord bot ",
   "main": "out/index.js",
   "scripts": {
-    "ts": "tsc -w"
+    "ts": "tsc -w",
+    "start" : "node ./out/index.js",
+    "deploy" : "node ./out/deploy.js"
   },
   "repository": {
     "type": "git",
