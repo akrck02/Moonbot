@@ -1,4 +1,4 @@
-import { ButtonInteraction, Interaction, Message } from "discord.js";
+import { ButtonInteraction, CommandInteraction, Interaction, Message } from "discord.js";
 
 const fs = require("fs");
 const config = require("./config.json");
@@ -18,7 +18,7 @@ export interface IConfig {
  * create a new discord client
  */
 const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES],
 });
 client.commands = new Collection();
 client.buttons = new Collection();
@@ -29,7 +29,7 @@ client.buttons = new Collection();
 const commandFiles = fs.readdirSync("./out/commands");
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    client.commands.set(command.data.toJSON().name, command);
+    client.commands.set(command.data.toJSON().name, command);    
 }
 
 /**
@@ -50,6 +50,7 @@ client.on("ready", () => {
     console.log("---------------------------------------------");
     console.log("Logged in as: " + client.user.tag);
     console.log("Date: " + new Date().toLocaleDateString());
+    client.user.setActivity('como ella no me ama', { type: 'WATCHING' });
 });
 
 /**
@@ -70,10 +71,11 @@ client.on("interactionCreate", async (interaction: Interaction) => {
  * @param interaction The interaction to handle
  * @returns void
  */
-async function handleCommands(interaction: Interaction) {
+async function handleCommands(interaction: CommandInteraction) {
     if (!interaction.isCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
+    
     if (!command) return;
 
     try {
@@ -96,17 +98,13 @@ async function handleCommands(interaction: Interaction) {
  async function handleButton(interaction: ButtonInteraction) {
     if (!interaction.isButton()) return;
 
-
-
     const command = client.buttons.get(interaction.customId);
-    console.log(command);
-    
-    if (!command) return;
+    if (!command) 
+        return;
 
     try {
         await command.execute(interaction);
     } catch (error) {
-        console.error(error);
         await interaction.reply({
             content: "There was an error while executing this command!",
             ephemeral: true,

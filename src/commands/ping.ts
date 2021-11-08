@@ -15,17 +15,17 @@ module.exports = {
                 .setLabel('Retry')
                 .setCustomId('retryPing')
                 .setStyle('PRIMARY')
-                .setEmoji('🔁')
+                .setEmoji('🪄')
                 ,
         );
 
         const ms = Date.now() - interaction.createdTimestamp;
-
         const embed = new MessageEmbed()
         .setColor('#0099ff')
         .setTitle('Pong! 👌')
-        .setURL('https://discord.js.org')
-        .setDescription('Response in ' + ms + 'ms');
+        .setURL('https://github.com/akrck02/moonbot')
+        .setImage(interaction.member?.user.avatarURL() || "")
+        .setDescription('Hi, ' + interaction.member?.user.username + '! \n Response in ' + ms + 'ms');
 
 		await interaction.reply({ content: ' ', embeds: [embed], components: [row] });
 	},
