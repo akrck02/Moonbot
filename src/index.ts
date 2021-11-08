@@ -1,32 +1,55 @@
-import { Message } from "discord.js";
+import { Interaction, Message } from "discord.js";
 import Bot from "./bot";
 
+const fs = require('fs');
 const config = require("./config.json");
-const { Client, Intents } = require('discord.js');
+const { Client, Collection, Intents } = require('discord.js');
+
+
+/**
+ * Config interface
+ */
+export interface IConfig {
+    BOT_TOKEN: string;  
+    PREFIX: string;
+}
 
 /**
  * create a new discord client
  */ 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-client.login(config.BOT_TOKEN);
+client.commands = new Collection();
 
-/**
- * runtime variables
- */
-const prefix = "$";
-let bot : Bot;
+const commandFiles = fs.readdirSync('./out/commands');
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+    client.commands.set(command.data.toJSON().name,command);
+}
 
-/**
- * On startup, create a new bot instance
- */
-client.on("ready", function(message : Message) {
-    console.log("I'm ready!");
-    bot = new Bot(prefix, client, config);
+console.log(client.commands);
+
+client.on('ready', () => {
+    console.log('ready');
 });
 
-/**
- * On message, check if the message is a command
- */
-client.on("message", function(message : Message) {
-    bot.handleMessage(message);
-});                                      
+client.on('interactionCreate', async (interaction:Interaction) => {
+	if (!interaction.isCommand()) return;
+
+	const command = client.commands.get(interaction.commandName);
+
+    console.log("Interaction detected.");
+    console.log("command : " + interaction.commandName);
+    console.log("internal command : " + command);
+    
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
+client.login(config.BOT_TOKEN);
+
