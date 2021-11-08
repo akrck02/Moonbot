@@ -1,55 +1,117 @@
-import { Interaction, Message } from "discord.js";
-import Bot from "./bot";
+import { ButtonInteraction, Interaction, Message } from "discord.js";
 
-const fs = require('fs');
+const fs = require("fs");
 const config = require("./config.json");
-const { Client, Collection, Intents } = require('discord.js');
-
+const { Client, Collection, Intents } = require("discord.js");
 
 /**
  * Config interface
  */
 export interface IConfig {
-    BOT_TOKEN: string;  
+    BOT_TOKEN: string;
     PREFIX: string;
+    SERVER_ID: string;
+    CLIENT_ID: string;
 }
 
 /**
  * create a new discord client
- */ 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+ */
+const client = new Client({
+    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+});
 client.commands = new Collection();
+client.buttons = new Collection();
 
-const commandFiles = fs.readdirSync('./out/commands');
+/**
+ *  Search command directory for commands
+ **/
+const commandFiles = fs.readdirSync("./out/commands");
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-    client.commands.set(command.data.toJSON().name,command);
+    const command = require(`./commands/${file}`);
+    client.commands.set(command.data.toJSON().name, command);
 }
 
-console.log(client.commands);
+/**
+ * search button directory for buttons
+ */
+const buttonFiles = fs.readdirSync("./out/buttons");
+for (const file of buttonFiles) {
+    const button = require(`./buttons/${file}`);
+    client.buttons.set(button.data.id, button);
+}
 
-client.on('ready', () => {
-    console.log('ready');
+/**
+ * Boot message and prepare
+ */
+client.on("ready", () => {
+    console.log("---------------------------------------------");
+    console.log("                MoonBot v.1.0                ");
+    console.log("---------------------------------------------");
+    console.log("Logged in as: " + client.user.tag);
+    console.log("Date: " + new Date().toLocaleDateString());
 });
 
-client.on('interactionCreate', async (interaction:Interaction) => {
-	if (!interaction.isCommand()) return;
+/**
+ * Handle interactions on discord chat
+ */
+client.on("interactionCreate", async (interaction: Interaction) => {
+    if (interaction.isCommand()) {
+        handleCommands(interaction);
+    }
 
-	const command = client.commands.get(interaction.commandName);
+    if (interaction.isButton()) {
+        handleButton(interaction);
+    }
+});
 
-    console.log("Interaction detected.");
-    console.log("command : " + interaction.commandName);
-    console.log("internal command : " + command);
+/**
+ * Handle commands for the bot
+ * @param interaction The interaction to handle
+ * @returns void
+ */
+async function handleCommands(interaction: Interaction) {
+    if (!interaction.isCommand()) return;
+
+    const command = client.commands.get(interaction.commandName);
+    if (!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({
+            content: "There was an error while executing this command!",
+            ephemeral: true,
+        });
+    }
+}
+
+
+/**
+ * Handle buttons for the bot
+ * @param interaction The interaction to handle
+ * @returns void
+ */
+ async function handleButton(interaction: ButtonInteraction) {
+    if (!interaction.isButton()) return;
+
+
+
+    const command = client.buttons.get(interaction.customId);
+    console.log(command);
     
-	if (!command) return;
+    if (!command) return;
 
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
-});
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({
+            content: "There was an error while executing this command!",
+            ephemeral: true,
+        });
+    }
+}
 
 client.login(config.BOT_TOKEN);
-
