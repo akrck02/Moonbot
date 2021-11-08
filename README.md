@@ -10,7 +10,9 @@
 ```json
 {
     "BOT_TOKEN": "your_token",
-    "PREFIX": "$"
+    "PREFIX": "$",
+    "SERVER_ID" : "serverID",
+    "CLIENT_ID" : "clientID"
 }
 ```
 
@@ -23,14 +25,15 @@ git clone https://github.com/akrck02/moonbot/latest
 ```bash
 cd ./moonbot
 ```
-5) Compile the typescript
+5) Compile the typescript and deploy
 ```bash
 npm run ts
+npm run deploy
 ```
 
 6) Run moonbot
 ```bash
-node run ./out/index.js
+npm run start
 ```
 
 7) **Enjoy moonbot features!**
