@@ -1,5 +1,7 @@
+const Canvas = require('canvas');
 import {
     Message,
+    MessageAttachment,
     MessageEmbed
 } from "discord.js";
 const { SlashCommandBuilder } = require("@discordjs/builders");
@@ -16,9 +18,16 @@ module.exports = {
             .setURL("https://github.com/akrck02/moonbot")
         ;
 
+        const canvas = Canvas.createCanvas(700, 700);
+		const context = canvas.getContext('2d');
+
+        const background = await Canvas.loadImage('https://cataas.com/cat/says/%EF%B8%8F');
+        context.drawImage(background, 0, 0, canvas.width, canvas.height);
+        const attachment = new MessageAttachment(canvas.toBuffer(), 'profile-image.png');
+
         await interaction.reply({
             content: " ",
-            files: ["https://cataas.com/cat/says/hello%20world!"],
+            files: [attachment],
             embeds: [embed],
         });
     },

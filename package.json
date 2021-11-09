@@ -5,8 +5,8 @@
   "main": "out/index.js",
   "scripts": {
     "ts": "tsc -w",
-    "start" : "node ./out/index.js",
-    "deploy" : "node ./out/deploy.js"
+    "start": "node ./out/index.js",
+    "deploy": "node ./out/deploy.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.2",
+    "canvas": "^2.8.0",
     "discord-api-types": "^0.24.0",
     "discord.js": "^13.3.1",
     "ffmpeg": "^0.0.4",
