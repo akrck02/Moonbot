@@ -1,5 +1,7 @@
 import { SlashCommandStringOption } from "@discordjs/builders";
 import { CommandInteraction, Guild, GuildMember, MessageEmbed } from "discord.js";
+import { players } from "../global.js";
+import { Player } from "../utils/player.js";
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
@@ -14,44 +16,29 @@ module.exports = {
         const url =  interaction.options.get("url")?.value as string || "https://www.youtube.com/watch?v=U06jlgpMtQs";
         const embed = new MessageEmbed()
         .setColor('#202020')
-        .setTitle("Playing video")
+        .setTitle("▶️ Video added to queue 🎵")
         .setURL(url)
         .setDescription(url);
 
 		await interaction.reply({ content: ' ', embeds: [embed] });
-
         play(interaction, url);
 	},
 }; 
 
-
-
 function play(interaction : CommandInteraction , url : string) {
-    const ytdl = require('ytdl-core');
-    const {
-        AudioPlayerStatus,
-        StreamType,
-        createAudioPlayer,
-        createAudioResource,
-        joinVoiceChannel,
-    } = require('@discordjs/voice'); 
+    const guidmember = interaction.member as GuildMember; 
+    const guild = interaction.guild as Guild;
+    const channel = guidmember.voice.channel;
 
+    if(channel) {
+        let player = players[channel.id];
+        if(!player){
+            player = new Player();
+        }
+        player.connectVoiceChannel(guidmember,guild);
+        player.addToYoutube(url);
+        players[channel.id] = player;
+        player.playYoutube();
+    }
 
-    const member = interaction.member as GuildMember;
-    const guild =  interaction.guild as Guild; 
-
-    const connection = joinVoiceChannel({
-        channelId: member.voice.channel?.id,
-        guildId: guild.id,
-        adapterCreator: guild.voiceAdapterCreator,
-    });
-
-    const stream = ytdl(url, { filter: 'audioonly' });
-    const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-    const player = createAudioPlayer();
-    
-    player.play(resource);
-    connection.subscribe(player);
-
-    player.on(AudioPlayerStatus.Idle, () => connection.destroy()); 
 }
