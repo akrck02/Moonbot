@@ -1,4 +1,4 @@
-out/config.json
+config.json
 node_modules
 out
 package-lock.json
