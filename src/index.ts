@@ -1,7 +1,9 @@
 import { ButtonInteraction, CommandInteraction, Interaction, Message } from "discord.js";
+import * as global from "./global";
+import { Player } from "./utils/player";
 
 const fs = require("fs");
-const config = require("./config.json");
+const config = require("../config.json");
 const { Client, Collection, Intents } = require("discord.js");
 
 /**
@@ -40,6 +42,11 @@ for (const file of buttonFiles) {
     const button = require(`./buttons/${file}`);
     client.buttons.set(button.data.id, button);
 }
+
+/**
+ * Start Queue
+ */
+global.setPlayers({});
 
 /**
  * Boot message and prepare

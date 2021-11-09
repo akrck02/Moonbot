@@ -1,5 +1,5 @@
 import { SlashCommandStringOption } from "@discordjs/builders";
-import { CommandInteraction, Interaction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { CommandInteraction, Message, MessageEmbed } from "discord.js";
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
