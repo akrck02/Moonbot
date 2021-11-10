@@ -5,7 +5,7 @@ const config = require("../config.json");
 const rest = new REST({ version: "9" }).setToken(config.BOT_TOKEN);
 
 const ping = require("./commands/ping.js").data;
-const pool = require("./commands/pool.js").data;
+const poll = require("./commands/poll.js").data;
 const random = require("./commands/random.js").data;
 const play = require("./commands/play.js").data;
 const cat = require("./commands/cat.js").data;
@@ -18,7 +18,7 @@ const github_repos = require("./commands/github_repos.js").data;
 const commands = 
 [
     ping,
-    pool,
+    poll,
     random,
     play,
     cat,
