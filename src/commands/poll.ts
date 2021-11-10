@@ -4,10 +4,10 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-    .setName("pool")
+    .setName("poll")
     .setDescription("Make a pool!")
-    .addStringOption(new SlashCommandStringOption().setName("title").setRequired(true).setDescription("The title of the pool."))
-    .addStringOption(new SlashCommandStringOption().setName("description").setRequired(true).setDescription("The description of the pool."))
+    .addStringOption(new SlashCommandStringOption().setName("title").setRequired(true).setDescription("The title of the poll."))
+    .addStringOption(new SlashCommandStringOption().setName("description").setRequired(true).setDescription("The description of the poll."))
     .addStringOption(new SlashCommandStringOption().setName("options").setRequired(true).setDescription("The options separates by & "))
     ,
 
