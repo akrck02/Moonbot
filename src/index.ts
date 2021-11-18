@@ -3,7 +3,18 @@ import * as global from "./global";
 import { Player } from "./utils/player";
 
 const fs = require("fs");
-const config = require("../config.json");
+let config;
+
+try { config = require("../config.json"); }
+catch(err){
+    config = {
+        BOT_TOKEN: process.env.BOT_TOKEN,
+        PREFIX: process.env.PREFIX,
+        SERVER_ID: process.env.SERVER_ID,
+        CLIENT_ID: process.env.CLIENT_ID,
+    };
+}
+
 const { Client, Collection, Intents } = require("discord.js");
 
 /**
