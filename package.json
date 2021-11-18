@@ -5,7 +5,7 @@
   "main": "out/index.js",
   "scripts": {
     "ts": "tsc -w",
-    "start": "tsc && node ./out/deploy.js && node ./out/index.js",
+    "start": "tsc && node ./out/index.js",
     "deploy": "node ./out/deploy.js"
   },
   "repository": {
