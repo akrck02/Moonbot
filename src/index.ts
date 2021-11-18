@@ -1,4 +1,5 @@
 import { ButtonInteraction, CommandInteraction, Interaction, Message } from "discord.js";
+import { start } from "./api";
 import * as global from "./global";
 import { Player } from "./utils/player";
 
@@ -131,3 +132,4 @@ async function handleCommands(interaction: CommandInteraction) {
 }
 
 client.login(config.BOT_TOKEN);
+start();
