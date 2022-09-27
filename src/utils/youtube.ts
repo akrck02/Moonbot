@@ -1,10 +1,10 @@
 import { Player } from "./player.js";
 
-export function play(player : Player) {
+export async function play(player : Player) {
     let video = player.getYoutube().getCurrent()
     
     if (video) {
-        playVideo(player,video);
+       await playVideo(player,video);
     }
 }
 

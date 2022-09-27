@@ -46,7 +46,7 @@ export class Player {
     /**
      * Play youtube video
      */
-    playYoutube() {
+    async playYoutube() {
        play(this);
     }
 
