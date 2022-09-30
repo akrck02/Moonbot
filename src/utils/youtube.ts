@@ -33,4 +33,7 @@ async function playVideo(player : Player, url : string) {
         else 
             player.leaveVoiceChannel()
     }); 
+
+
+    
 }

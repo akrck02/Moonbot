@@ -1,4 +1,4 @@
-import { Interaction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { Client, Interaction, Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
@@ -6,8 +6,19 @@ module.exports = {
 		.setName('ping')
 		.setDescription('Replies with Pong!'),
 
-	async execute(interaction : Message) {
-        
+	async execute(interaction : Message, client: Client, retry : boolean = false) {
+
+        if(retry) {
+            const embed = new MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle('You did it!! 👌')
+            .setURL('https://github.com/akrck02/moonbot')
+            .setDescription('May the 4th be with u 🙂');
+    
+            await interaction.reply({ content: ' ', embeds: [embed]});
+            return;
+        } 
+
         const row = new MessageActionRow()
         .addComponents(
             new MessageButton()
@@ -27,6 +38,6 @@ module.exports = {
         .setImage(interaction.member?.user.avatarURL() || "")
         .setDescription('Hi, ' + interaction.member?.user.username + '! \n Response in ' + ms + 'ms');
 
-		await interaction.reply({ content: ' ', embeds: [embed], components: [row] });
+        await interaction.reply({ content: ' ', embeds: [embed], components: [row] });
 	},
 }; 
