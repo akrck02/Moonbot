@@ -8,7 +8,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
     .setName("play")
     .setDescription("Play a video on voice chat")
-    .addStringOption(new SlashCommandStringOption().setName("url").setRequired(true).setDescription("The URL of the video."))
+    .addStringOption(new SlashCommandStringOption().setName("url").setRequired(false).setDescription("The URL of the video."))
     ,
 
 	async execute(interaction : CommandInteraction) {
@@ -21,24 +21,47 @@ module.exports = {
         .setDescription(url);
 
 		await interaction.reply({ content: ' ', embeds: [embed] });
-        play(interaction, url);
+        await play(interaction, url);
+    
 	},
 }; 
 
-function play(interaction : CommandInteraction , url : string) {
+async function play(interaction : CommandInteraction , url : string) {
     const guidmember = interaction.member as GuildMember; 
     const guild = interaction.guild as Guild;
     const channel = guidmember.voice.channel;
 
-    if(channel) {
-        let player = players[channel.id];
-        if(!player){
-            player = new Player();
-        }
-        player.connectVoiceChannel(guidmember,guild);
-        player.addToYoutube(url);
-        players[channel.id] = player;
-        player.playYoutube();
-    }
 
+    try {
+        if(channel) {
+            
+            // if player active get it, else create a new one
+            let player = players[channel.id];
+            if(!player){
+                player = new Player();
+                player.connectVoiceChannel(guidmember,guild);
+                player.addToYoutube(url);
+                player.playYoutube();
+                players[channel.id] = player;
+                return;
+            }
+
+            // connect to voice channel
+            player.connectVoiceChannel(guidmember,guild);
+            
+            // add url to queue
+            player.addToYoutube(url);
+            
+            // update player 
+            players[channel.id] = player;
+        }
+    } catch(error){
+        console.log(error);
+        const embed = new MessageEmbed()
+        .setColor('#ff2222')
+        .setTitle("There was an error playing this song! 😢")
+        .setURL(url)
+        .setDescription("is this a valid URL? ");
+        await interaction.reply({ content: ' ', embeds: [embed] });
+    }
 }

@@ -29,10 +29,10 @@ module.exports = {
         for (const key in repos) {
             const repo = repos[key];
             embed.setImage(repo.owner.avatar_url || "");
-            embed.addField(repo.name, repo.description || "no description");
+            embed.addFields({name:repo.name, value: repo.description || "no description"})
         }
 
-        await interaction.editReply({content: "Success!" , embeds : [embed]});        
+        await interaction.editReply({content: repos.length +" repositories found! 🤓" , embeds : [embed]});        
     },
 };
 

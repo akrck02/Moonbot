@@ -10,6 +10,6 @@ module.exports = {
         let array = interaction.content;
         console.log(array);
         
-        ping.execute(interaction);
+        ping.execute(interaction,null,true);
     },
 };

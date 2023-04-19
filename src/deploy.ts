@@ -11,6 +11,8 @@ const play = require("./commands/play.js").data;
 const cat = require("./commands/cat.js").data;
 const queue = require("./commands/queue.js").data;
 const github_repos = require("./commands/github_repos.js").data;
+const state = require("./commands/state.js").data;
+const clear = require("./commands/clear.js").data;
 
 /**
  * add commands
@@ -23,7 +25,9 @@ const commands =
     play,
     cat,
     queue,
-    github_repos
+    github_repos,
+    state,
+    clear
 ];
 
 rest.put(Routes.applicationCommands(config.CLIENT_ID), { body: commands })

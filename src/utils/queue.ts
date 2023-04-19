@@ -48,4 +48,8 @@ export class Queue {
     getList() : string[] {
         return this.list;
     }
+
+    isEmpty() : boolean {
+        return this.list.length == 0;
+    }
 }

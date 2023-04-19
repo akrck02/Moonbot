@@ -10,7 +10,8 @@ export async function getUserRepositories(user : string) : Promise<any>  {
     const response = await axios({
         proxy: undefined,
         method : 'get',    
-        url : 'https://api.github.com/users/' + user + '/repos'
+        url : 'https://api.github.com/users/' + user + '/repos?per_page=10000'
     });
+
     return response;
 }
