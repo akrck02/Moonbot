@@ -77,6 +77,7 @@ var (
 )
 
 func RegisterCommands(s *discordgo.Session) {
+
 	registeredCommands := make([]*discordgo.ApplicationCommand, len(commands))
 	for i, v := range commands {
 		cmd, err := s.ApplicationCommandCreate(s.State.User.ID, "", v)
@@ -84,6 +85,20 @@ func RegisterCommands(s *discordgo.Session) {
 			log.Panicf("Cannot create '%v' command: %v", v.Name, err)
 		}
 		registeredCommands[i] = cmd
+	}
+}
+
+func DeleteCommands(s *discordgo.Session) {
+	commands, err := s.ApplicationCommands(s.State.User.ID, "")
+	if err != nil {
+		log.Panicf("Cannot get commands: %v", err)
+	}
+
+	for _, v := range commands {
+		err = s.ApplicationCommandDelete(s.State.User.ID, "", v.ID)
+		if err != nil {
+			log.Panicf("Cannot delete '%v' command: %v", v.Name, err)
+		}
 	}
 }
 
