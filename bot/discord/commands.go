@@ -66,7 +66,7 @@ var (
 		"ping":        PingCommand,
 		"cat":         CatCommand,
 		"random":      NotImplementedCommand,
-		"poll":        NotImplementedCommand,
+		"poll":        PollCommand,
 		"play":        NotImplementedCommand,
 		"stop":        NotImplementedCommand,
 		"skip":        NotImplementedCommand,
